@@ -22,7 +22,7 @@
     }
 
     &[data-placement^="top"] {
-        > .tippy-arrow {
+        >.tippy-arrow {
             &::before {
                 border-top-color: var(--color-background-popover);
             }
@@ -30,7 +30,7 @@
     }
 
     &[data-placement^="bottom"] {
-        > .tippy-arrow {
+        >.tippy-arrow {
             &::before {
                 border-bottom-color: var(--color-background-popover);
             }
@@ -38,7 +38,7 @@
     }
 
     &[data-placement^="left"] {
-        > .tippy-arrow {
+        >.tippy-arrow {
             &::before {
                 border-left-color: var(--color-background-popover);
             }
@@ -46,7 +46,7 @@
     }
 
     &[data-placement^="right"] {
-        > .tippy-arrow {
+        >.tippy-arrow {
             &::before {
                 border-right-color: var(--color-background-popover);
             }
@@ -80,9 +80,10 @@
     border: 1px solid var(--color-border-popover-menu);
     border-radius: 6px;
     box-shadow: var(--box-shadow-popover-menu);
-    font-size: 1.0714em; /* 15px at 14px em */
+    font-size: 1.0714em;
+    /* 15px at 14px em */
 
-    > .tippy-content {
+    >.tippy-content {
         padding: 0;
         /* We set the font-size here to override the
            default value in the upstream tippy.css */
@@ -90,23 +91,23 @@
         font-size: 1em;
     }
 
-    > .tippy-arrow {
+    >.tippy-arrow {
         color: var(--color-background-popover-menu);
     }
 
-    &[data-placement^="top"] > .tippy-arrow::before {
+    &[data-placement^="top"]>.tippy-arrow::before {
         bottom: var(--popover-tippy-arrow-before-offset);
     }
 
-    &[data-placement^="bottom"] > .tippy-arrow::before {
+    &[data-placement^="bottom"]>.tippy-arrow::before {
         top: var(--popover-tippy-arrow-before-offset);
     }
 
-    &[data-placement^="left"] > .tippy-arrow::before {
+    &[data-placement^="left"]>.tippy-arrow::before {
         right: var(--popover-tippy-arrow-before-offset);
     }
 
-    &[data-placement^="right"] > .tippy-arrow::before {
+    &[data-placement^="right"]>.tippy-arrow::before {
         left: var(--popover-tippy-arrow-before-offset);
     }
 }
@@ -148,9 +149,7 @@
 
             &:hover {
                 color: var(--color-text-popover-menu);
-                background-color: var(
-                    --color-background-text-hover-direct-mention
-                );
+                background-color: var(--color-background-text-hover-direct-mention);
                 text-decoration: none;
             }
         }
@@ -249,8 +248,7 @@
     opacity: 1;
 }
 
-.hidden-remove-button-row:hover
-    .hidden-remove-button:not(:has(.button-loading-indicator)) {
+.hidden-remove-button-row:hover .hidden-remove-button:not(:has(.button-loading-indicator)) {
     opacity: 1;
     visibility: visible;
     pointer-events: auto;
@@ -288,7 +286,8 @@
         line-height: 1.1;
         margin-top: 4px;
         white-space: pre-wrap;
-        min-width: 12.5em; /* 200px at 16px/1em */
+        min-width: 12.5em;
+        /* 200px at 16px/1em */
     }
 }
 
@@ -336,8 +335,7 @@ ul.popover-group-menu-member-list {
         display: grid;
         grid-template-areas: "group-member-icon gap group-member-name";
         grid-template-columns:
-            max-content var(--user-group-popover-icon-text-gap)
-            minmax(0, 1fr);
+            max-content var(--user-group-popover-icon-text-gap) minmax(0, 1fr);
         width: unset;
     }
 
@@ -564,15 +562,11 @@ ul.popover-group-menu-member-list {
 
     #user-profile-groups-tab,
     #user-profile-streams-tab {
-        height: calc(
-            var(--user-profile-modal-body-height) -
-                var(--user-profile-modal-body-margin-bottom)
-        );
+        height: calc(var(--user-profile-modal-body-height) - var(--user-profile-modal-body-margin-bottom));
         display: grid;
         grid-template:
             "alert" auto
-            "top" minmax(0, 1fr)
-            "bottom" auto
+            "top" minmax(0, 1fr) "bottom" auto
             / minmax(0, 1fr);
 
         .stream_list_info:has(.banner),
@@ -582,7 +576,8 @@ ul.popover-group-menu-member-list {
         }
 
         .stream-list-loader:not(:empty) {
-            margin: auto; /* center the spinner */
+            margin: auto;
+            /* center the spinner */
 
             .loading_indicator_spinner {
                 margin-top: 10px;
@@ -651,7 +646,7 @@ ul.popover-group-menu-member-list {
         left: 0 !important;
 
         width: 100vw;
-        height: 100vh;
+        height: var(--full-height-dynamic-viewport);
 
         display: flex !important;
         justify-content: center;
@@ -680,6 +675,7 @@ ul.popover-group-menu-member-list {
     }
 
     #user-profile-modal {
+
         .group-list-top-section,
         .stream-list-top-section {
             display: block;
@@ -709,6 +705,7 @@ ul.popover-group-menu-member-list {
 }
 
 .emoji-popover-root {
+
     /* The emoji popover has a different background color for the
        header and footer, so we customize the arrow to match this color. */
     .tippy-box[data-placement="top"] .tippy-arrow::before {
@@ -724,7 +721,7 @@ ul.popover-group-menu-member-list {
     }
 }
 
-.modal__overlay #set-user-status-modal + .emoji-popover-root {
+.modal__overlay #set-user-status-modal+.emoji-popover-root {
     /* Micromodal prevents pointer events to elements outside the content.
        We need to re-enable pointer events for the emoji popover to work. */
     pointer-events: auto;
@@ -797,6 +794,7 @@ ul.popover-group-menu-member-list {
 
 #message_report_modal,
 #move_topic_modal {
+
     /* Modals have a 16px/1em base font-size. */
     & form {
         margin: 0;
@@ -859,8 +857,7 @@ ul.popover-group-menu-member-list {
         display: grid;
         /* 30px at 16px/1em */
         grid-template:
-            "move-topic-input clear-topic" auto / minmax(0, 1fr)
-            1.875em;
+            "move-topic-input clear-topic" auto / minmax(0, 1fr) 1.875em;
 
         & input.move_messages_edit_topic {
             grid-column: move-topic-input-start / clear-topic-end;
@@ -946,7 +943,7 @@ ul.popover-group-menu-member-list {
                 vertical-align: baseline;
             }
 
-            & + label.checkbox {
+            &+label.checkbox {
                 margin-top: 10px;
             }
         }
@@ -1351,10 +1348,7 @@ ul.popover-group-menu-member-list {
 }
 
 .color-picker-popover {
-    --popover-menu-max-width: calc(
-        var(--padding-color-swatch-list) * 2 + var(--size-color-swatch) * 6 +
-            var(--grid-gap-color-swatch) * 5
-    );
+    --popover-menu-max-width: calc(var(--padding-color-swatch-list) * 2 + var(--size-color-swatch) * 6 + var(--grid-gap-color-swatch) * 5);
 }
 
 .personal-menu-clear-status {
@@ -1507,7 +1501,7 @@ ul.popover-menu-list {
     margin-left: auto;
     padding-left: 5px;
 
-    > .popover-menu-hotkey-hint {
+    >.popover-menu-hotkey-hint {
         box-sizing: border-box;
         color: var(--color-popover-hotkey-hint);
         text-align: center;
