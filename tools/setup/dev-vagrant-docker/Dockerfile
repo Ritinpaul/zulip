@@ -23,27 +23,27 @@ RUN echo locales locales/default_environment_locale select C.UTF-8 | debconf-set
            systemd \
     && rm -rf /var/lib/apt/lists/*
 
-ARG VAGRANT_UID
+ARG VAGRANT_UID=1000
+
 
 RUN \
-    # We use https://github.com/gdraheim/docker-systemctl-replacement
-    # to make services we install like PostgreSQL, Redis, etc. normally
-    # managed by systemd start within Docker, which breaks normal
-    # operation of systemd.
-    dpkg-divert --add --rename /bin/systemctl \
-    && curl -fLsS --retry 3 -o /bin/systemctl 'https://raw.githubusercontent.com/gdraheim/docker-systemctl-replacement/v1.5.9063/files/docker/systemctl3.py' \
-    && echo '1744aa7281159668d51fc97e57d834b6f116da10796f7f3352de48ad0cbba5b2  /bin/systemctl' | sha256sum -c \
-    && chmod +x /bin/systemctl \
+    dpkg-divert --add --rename /bin/systemctl
+
+COPY systemctl3.py /bin/systemctl
+
+RUN chmod +x /bin/systemctl \
     && ln -nsf /bin/true /usr/sbin/policy-rc.d \
     && mkdir -p /run/sshd \
     # docker-systemctl-replacement doesn’t work with template units yet:
     # https://github.com/gdraheim/docker-systemctl-replacement/issues/62
-    && ln -ns /lib/systemd/system/postgresql@.service /etc/systemd/system/multi-user.target.wants/postgresql@14-main.service \
+    && ln -ns /lib/systemd/system/postgresql@.service /etc/systemd/system/multi-user.target.wants/postgresql@14-main.service
+
     # Set up the vagrant user and its SSH key (globally public)
+RUN if [ "$VAGRANT_UID" = "0" ] || [ -z "$VAGRANT_UID" ]; then VAGRANT_UID=1000; fi \
     && useradd -ms /bin/bash -u "$VAGRANT_UID" vagrant \
-    && mkdir -m 700 ~vagrant/.ssh \
-    && curl -fLsS --retry 3 -o ~vagrant/.ssh/authorized_keys 'https://raw.githubusercontent.com/hashicorp/vagrant/be7876d83644aa6bdf7f951592fdc681506bcbe6/keys/vagrant.pub' \
-    && chown -R vagrant: ~vagrant/.ssh \
+    && mkdir -p /home/vagrant/.ssh \
+    && echo 'ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEA6NF8iallvQVp22WDkTkyrtvp9eWW6A8YVr+kz4TjGYe7gHzIw+niNltGEFHzD8+v1I2YJ6oXevct1YeS0o9HZyN1Q9qgCgzUFtdOKLv6IedplqoPkcmF0aYet2PkEDo3MlTBckFXPITAMzF8dJSIFo9D8HfdOV0IAdx4O7PtixWKn5y2hMNG0zQPyUecp4pzC6kivAIhyfHilFR61RGL+GPXQ2MWZWFYbAGjyiYJnAmCP3NOTd0jMZEnDkbUvxhMmBYSdETk1rRgm+R4LOzFUGaHqHDLKLX+FIPKcF96hrucXzcWyLbIbEgE98OHlnVYCzRdK8jlqm8tehUc9c9WhQ== vagrant insecure public key' > /home/vagrant/.ssh/authorized_keys \
+    && chown -R vagrant: /home/vagrant/.ssh \
     && echo 'vagrant ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/vagrant
 
 CMD ["/bin/systemctl"]
